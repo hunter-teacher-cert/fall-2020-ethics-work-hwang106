@@ -1,5 +1,5 @@
 ## last name: Wang
-## first name: Huang
+## first name: Huan
 ## github username: hwang106
 ---------------------
 ### general workflow:
