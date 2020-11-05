@@ -19,8 +19,6 @@ def rand_votes(state):
             state[x][y] = random.randint(0,1)
 
 def create_districts(state):
-    #general rule 1: min district size = 2
-    #general question 2: district size is based on population (no guidelines were given on population) or based on geographic area (i.e number of coordinates) 
     total_districts = 6
     districts = [[] for y in range(total_districts)] #initializes district list
     remaining_coordinates = [[0,0] for x in range(rows*cols)] #initializes master list of coordinates
@@ -120,13 +118,16 @@ def create_districts(state):
 
     return districts
 
-def show_districts(state, districts):
+def show_districts(districts):
     d = 1
     for i in districts:
         print("District " + str(d))
         print(i)
-        d += 1      
-
+        d += 1
+'''
+def count_votes(state, districts):
+    for       
+'''
 #Main
 state_grid = make_state(rows, cols)
 show_state(state_grid)
@@ -136,6 +137,6 @@ show_state(state_grid)
 print("\n")
 districts = create_districts(state_grid)
 print("\n")
-show_districts(state_grid, districts)
+show_districts(districts)
 
 # %%
