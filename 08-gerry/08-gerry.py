@@ -163,36 +163,68 @@ def check_district_size(districts):
 
 
 #Main
-state_grid = make_state(rows, cols)
-#show_state(state_grid)
-rand_thirded_votes(state_grid)
-#print("\n")
-show_state(state_grid)
-print("\n")
-#Computationally lazy and inefficient way of ensuring equal-sized districts by repeating create_districts algorithm until balanced
-num_district_sims = 200
-win_tally = [0 for x in range(total_districts + 1)]
-for x in range(num_district_sims):
-    is_balanced = False
-    while not is_balanced:
-        districts = create_districts(state_grid)
-        is_balanced = check_district_size(districts)
-    print("\n")
-    show_districts(districts)
-    print("\n")
-    vote_tally = count_votes(state_grid, districts)
-    print("\n")
-    num_wins = count_wins(vote_tally)
-    win_tally[num_wins] += 1
-    print(win_tally)
-    win_freq = [y / (x+1) for y in win_tally]
-    print(win_freq)
+#a situation where 1/3 of the voters are 1's, but a random districting plan is more likely to give them no districts than two districts.
+list_0 = []
+#a situation where 1/3 of the voters are 1's, but where they win no districts (sus)
+list_1 = []
+#a situation where 1/3 of the voters are 1's, and they win 3 districts  (again, sus)
+list_2 = []
+#a situation where 1/3 of the voters are 1's, but there is simply no way for them to win more than one district (sus much?)
+list_3 = []
+
+num_sims = 100
+
+for x in range(num_sims):
+    state_grid = make_state(rows, cols)
+    rand_thirded_votes(state_grid)
+    #print("\n")
+    #show_state(state_grid)
+    #print("\n")
+    #Computationally lazy and inefficient way of ensuring equal-sized districts by repeating create_districts algorithm until balanced
+    num_district_sims = 100
+    win_tally = [0 for x in range(total_districts + 1)]
+    for y in range(num_district_sims):
+        is_balanced = False
+        while not is_balanced:
+            districts = create_districts(state_grid)
+            is_balanced = check_district_size(districts)
+        #print("\n")
+        #show_districts(districts)
+        #print("\n")
+        vote_tally = count_votes(state_grid, districts)
+        #print("\n")
+        num_wins = count_wins(vote_tally)
+        win_tally[num_wins] += 1
+        #print(win_tally)
+        win_freq = [z / (x+1) for z in win_tally]
+        #print(win_freq)
+    if win_freq[0] > win_freq[2]:
+        list_0.append(state_grid)
+    if win_freq[0] > 0:
+        list_1.append(state_grid)
+    if win_freq[3] > 0:
+        list_2.append(state_grid)
+    if win_freq[2] == 0 and win_freq[3] == 0 and win_freq[4] == 0 and win_freq[5] == 0 and win_freq[6] == 0:
+        list_3.append(state_grid)
+
+    #print("\n")
+    #show_state(state_grid)
 
 print("\n")
-show_state(state_grid)
-
-
-
-
-
+print("These are the distributions where it was more likely 1's won no districts than 2 districts:")
+for i in range(len(list_0)):
+    show_state(list_0[i])
+    print("\n")
+print("These are the distributions where it was possible for 1's to win no districts:")
+for i in range(len(list_1)):
+    show_state(list_1[i])
+    print("\n")
+print("These are the distributions where it was possible for 1's to win 3 districts:")
+for i in range(len(list_2)):
+    show_state(list_2[i])
+    print("\n")
+print("These are the distributions where it was impossible for 1's to win more than 1 district:")
+for i in range(len(list_3)):
+    show_state(list_3[i])
+    print("\n")
 # %%
