@@ -4,6 +4,8 @@ import random
 rows = 6
 cols = 3
 total_districts = 6
+#this represents the denominator of the fraction of the grid that will be populated with 1's (e.g. 2 means half)
+denom_fraction_ones = 2 
 
 def make_state(rows, cols):
     state = [[0 for x in range(cols)] for y in range(rows)]
@@ -18,9 +20,9 @@ def rand_votes(state):
         for y in range(cols):
             state[x][y] = random.randint(0,1)
 
-def rand_thirded_votes(state):
+def rand_divided_votes(state, fraction_ones):
     counter = 0
-    while counter < ((rows * cols) / 3):
+    while counter < ((rows * cols) / fraction_ones):
         a = random.randint(0, rows - 1)
         b = random.randint(0, cols - 1)
         if state[a][b] != 1: 
@@ -176,7 +178,7 @@ list_max = []
 #list that updates with the least advantageous distribution for 1's
 list_min = []
 
-num_sims = 100
+num_sims = 200
 max_rating = 0
 min_rating = 0
 max_rating_freq = []
@@ -184,7 +186,7 @@ min_rating_freq = []
 
 for x in range(num_sims):
     state_grid = make_state(rows, cols)
-    rand_thirded_votes(state_grid)
+    rand_divided_votes(state_grid, denom_fraction_ones)
     #print("\n")
     #show_state(state_grid)
     #print("\n")
@@ -214,7 +216,7 @@ for x in range(num_sims):
         list_2.append(state_grid)
     if win_freq[2] == 0 and win_freq[3] == 0 and win_freq[4] == 0 and win_freq[5] == 0 and win_freq[6] == 0:
         list_3.append(state_grid)
-    expected_districts = 2
+    expected_districts = total_districts / denom_fraction_ones
     grid_rating = 0
     for a in range(len(win_freq)):
         weight = a - expected_districts
