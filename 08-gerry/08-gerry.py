@@ -173,6 +173,8 @@ list_1 = []
 list_2 = []
 #a situation where 1/3 of the voters are 1's, but there is simply no way for them to win more than one district (sus much?)
 list_3 = []
+#a situation where 1/2 of  the voters are 1's, and they can win 5 or 6 districts
+list_4 = []
 #list that updates with most advantageous distribution for 1's
 list_max = []
 #list that updates with the least advantageous distribution for 1's
@@ -216,6 +218,8 @@ for x in range(num_sims):
         list_2.append(state_grid)
     if win_freq[2] == 0 and win_freq[3] == 0 and win_freq[4] == 0 and win_freq[5] == 0 and win_freq[6] == 0:
         list_3.append(state_grid)
+    if win_freq[5] > 0 or win_freq[6] > 0:
+        list_4.append(state_grid)
     expected_districts = total_districts / denom_fraction_ones
     grid_rating = 0
     for a in range(len(win_freq)):
@@ -243,9 +247,9 @@ print("These are the distributions where it was possible for 1's to win no distr
 for i in range(len(list_1)):
     show_state(list_1[i])
     print("\n")
-print("These are the distributions where it was possible for 1's to win 3 districts:")
-for i in range(len(list_2)):
-    show_state(list_2[i])
+print("These are the distributions where it was possible for 1's to win 5 or 6 districts:")
+for i in range(len(list_4)):
+    show_state(list_4[i])
     print("\n")
 print("These are the distributions where it was impossible for 1's to win more than 1 district:")
 for i in range(len(list_3)):
