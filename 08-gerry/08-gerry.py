@@ -171,8 +171,16 @@ list_1 = []
 list_2 = []
 #a situation where 1/3 of the voters are 1's, but there is simply no way for them to win more than one district (sus much?)
 list_3 = []
+#list that updates with most advantageous distribution for 1's
+list_max = []
+#list that updates with the least advantageous distribution for 1's
+list_min = []
 
 num_sims = 100
+max_rating = 0
+min_rating = 0
+max_rating_freq = []
+min_rating_freq = []
 
 for x in range(num_sims):
     state_grid = make_state(rows, cols)
@@ -196,7 +204,7 @@ for x in range(num_sims):
         num_wins = count_wins(vote_tally)
         win_tally[num_wins] += 1
         #print(win_tally)
-        win_freq = [z / (x+1) for z in win_tally]
+        win_freq = [z / (y+1) for z in win_tally]
         #print(win_freq)
     if win_freq[0] > win_freq[2]:
         list_0.append(state_grid)
@@ -206,7 +214,21 @@ for x in range(num_sims):
         list_2.append(state_grid)
     if win_freq[2] == 0 and win_freq[3] == 0 and win_freq[4] == 0 and win_freq[5] == 0 and win_freq[6] == 0:
         list_3.append(state_grid)
+    expected_districts = 2
+    grid_rating = 0
+    for a in range(len(win_freq)):
+        weight = a - expected_districts
+        grid_rating += weight * win_freq[a]
+    if grid_rating > max_rating:
+        max_rating = grid_rating
+        max_rating_freq = win_freq
+        list_max = state_grid
+    if grid_rating < min_rating: 
+        min_rating = grid_rating
+        min_rating_freq = win_freq
+        list_min = state_grid
 
+    
     #print("\n")
     #show_state(state_grid)
 
@@ -227,4 +249,17 @@ print("These are the distributions where it was impossible for 1's to win more t
 for i in range(len(list_3)):
     show_state(list_3[i])
     print("\n")
+print("This was the most advantageous distribution found:")
+show_state(list_max)
+print("\n")
+print("These were the relative frequencies for number of districts won, starting with 0 on the left up to 6 on the right: ")
+print(max_rating_freq)
+print("It had a rating of: " + str(max_rating))
+print("\n")
+print("This was the least advantageous distribution found:")
+show_state(list_min)
+print("\n")
+print("These were the relative frequencies for number of districts won, starting with 0 on the left up to 6 on the right: ")
+print(min_rating_freq)
+print("It had a rating of: " + str(min_rating))
 # %%
